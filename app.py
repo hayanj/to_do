@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import config #config file where password and keys stored
@@ -19,7 +19,23 @@ class ToDo(db.Model):
     def __repr__(self):
         return f'<ID: {self.id}, Description: {self.description}>'
 
+with app.app_context():
+    db.create_all()
+
 #routes
+@app.route('/todos/create', methods=['POST'])
+def create():
+    todo_item=ToDo(description=request.form.get('description'),
+                    completed=False)
+    db.session.add(todo_item)
+    db.session.commit()
+    return redirect(url_for('index'))
+
 @app.route('/')
 def index():
-    return 'Hello'
+    return render_template('index.html', data=ToDo.query.all())
+
+
+
+if __name__ == '__main__':
+   app.run(host="0.0.0.0", port=3000)
