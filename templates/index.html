@@ -51,6 +51,7 @@
 
 
         <script>
+            // delete todo 
             const deleteBtns = document.querySelectorAll('.delete-button');
                 for (let i = 0; i < deleteBtns.length; i++) {
                     const btn = deleteBtns[i];
@@ -62,6 +63,7 @@
                     }
                 }
 
+                //check completed todo
                 const checked = document.querySelectorAll('.check-completed');
                 for (let i=0; i< checked.length; i++){
                     const checkbox = checked[i];
@@ -84,6 +86,8 @@
                         });
                     }
                 }
+
+                //create todo
                 const description = document.getElementById('description');
                 document.getElementById('form').onsubmit = function(e) {
                     e.preventDefault();
@@ -114,6 +118,7 @@
                     });
                 }
 
+                //create todolist
                 const list_name = document.getElementById('list_name');
                 document.getElementById('list_form').onsubmit = function(e) {
                     e.preventDefault();
@@ -143,6 +148,7 @@
                     });
                 }
 
+                //check completedt todolist
                 const list_checked = document.querySelectorAll('.list-check-completed');
                 for (let i=0; i< list_checked.length; i++){
                     const checkbox = list_checked[i];
@@ -166,8 +172,8 @@
                     }
                 }
 
-                deleteListBtns = document.querySelectorAll(".delete-list");
-      
+                //delete todolist
+                const deleteListBtns = document.querySelectorAll(".delete-list");
                 for (let i = 0; i < deleteListBtns.length; i++) {
                     const deleteBtn = deleteListBtns[i];
                     deleteBtn.onclick = function(e) {
