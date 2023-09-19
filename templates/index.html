@@ -1,78 +1,52 @@
 <html>
     <head>
         <title>Todo App</title>
-        <style>
-            .hidden {
-                display: none;
-            }
-            ul{
-                list-style: none;
-                padding: 0;
-                margin: 0;
-                width: 300px;
-            }
-            li {
-                clear: both;
-            }
-            li button{
-                -webkit-appearance: none;
-                border: none;
-                outline: none;
-                color: red;
-                float: right;
-                cursor: pointer;
-                font-size: 20px;
-            }
-            .lists-wrapper, .todos-wrapper {
-                display: inline-block;
-                vertical-align: top;
-            }
-        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     </head>
     
     <body>
-        <div class="lists-wrapper">
-            <form id="list_form">
-                <div>
-                    <!-- <label for="name">Create ToDo Item</label> -->
-                    <input type="text" name="name" id="list_name">
-                </div>
-                <div>
-                    <input type="submit" id="submit_list" value="Create">
-                </div>
-            </form>
-            <ul id="lists">
-                {%for list in lists%}
-                    <li><input class="list-check-completed" data-id= "{{list.id}}" type="checkbox" {%if list.completed%} checked {%endif%}/>
-                        <a href="/lists/{{list.id}}"><li>{{list.name}}</li></a>
-                    <button class="delete-list" data-id="{{ list.id }}">&cross;</button>
-                {%endfor%}
-            </ul>
-        </div>
+        <div class="wrapper">
+            <div class="lists-wrapper">
+                <form id="list_form">
+                    <div>
+                        <!-- <label for="name">Create ToDo Item</label> -->
+                        <input type="text" name="name" id="list_name">
+                        <input type="submit" id="submit_list" value="Create">
+                    </div>
+                </form>
 
-        <div class="todos-wrapper">
-            <h4>{{active_list.name}}</h4>
-            <form id="form">
-                <div>
-                    <!-- <label for="name">Create ToDo Item</label> -->
-                    <input id="list_id" type="hidden" value="{{ active_list.id }}">
-                    <input type="text" name="description" id="description">
-                </div>
-                <div>
-                    <input type="submit" id="submit" value="Create">
-                </div>
-            </form>
-    
-            <div id="error" class="hidden">Something went wrong!</div>
-    
-            <ul id="todos">
-                {% for todo in todos %}
-                    <li><input class="check-completed" data-id= "{{todo.id}}" type="checkbox" {%if todo.completed%} checked {%endif%}/>
-                        {{todo.description}}
-                        <button class="delete-button" data-id="{{ todo.id }}">&cross;</button>
-                    </li>
-                {% endfor %}
-            </ul>
+                <ul id="lists">
+                    {%for list in lists%}
+                        <li><input class="list-check-completed" data-id= "{{list.id}}" type="checkbox" {%if list.completed%} checked {%endif%}/>
+                            <a href="/lists/{{list.id}}">{{list.name}}</a>
+                        <button class="delete-list delete" data-id="{{ list.id }}">X</button>
+                    {%endfor%}
+                </ul>
+            </div>
+
+            <div class="todos-wrapper">
+                <h4>{{active_list.name}}</h4>
+                <form id="form">
+                    <div>
+                        <!-- <label for="name">Create ToDo Item</label> -->
+                        <input id="list_id" type="hidden" value="{{ active_list.id }}">
+                        <input type="text" name="description" id="description">
+                        <input type="submit" id="submit" value="Create">
+                    </div>
+                </form>
+        
+                <div id="error" class="hidden">Something went wrong!</div>
+        
+                <ul id="todos">
+                    {% for todo in todos %}
+                        <li><input class="check-completed" data-id= "{{todo.id}}" type="checkbox" {%if todo.completed%} checked {%endif%}/>
+                            {{todo.description}}
+                            <button class="delete-button delete" data-id="{{ todo.id }}">X</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
 
 

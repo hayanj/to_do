@@ -12,6 +12,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+#####################################################
+#---------------------Models-------------------------
+#####################################################
+
 #ToDoList Model
 class ToDoList(db.Model):
     __tablename__ = 'todolists'
@@ -35,7 +39,12 @@ class ToDo(db.Model):
 with app.app_context():
     db.create_all()
 
-#routes
+#####################################################
+#---------------------Routes-------------------------
+#####################################################
+
+#--------------------Todo routes---------------------
+#create todo item
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
   error = False
@@ -57,7 +66,8 @@ def create_todo():
     abort (400)
   else:
     return jsonify(body)
-    
+  
+#complete a todo item    
 @app.route('/todos/<todo_id>/set-completed', methods=['POST'])
 def complete_todo(todo_id):
   error = False
@@ -78,6 +88,7 @@ def complete_todo(todo_id):
   else:
     return redirect(url_for('index'))
   
+#delete a todo item  
 @app.route('/todos/<todo_id>', methods=['DELETE'])
 def delete_todo(todo_id):
   try:
@@ -89,21 +100,8 @@ def delete_todo(todo_id):
     db.session.close()
   return jsonify({ 'success': True })
 
-@app.route('/lists/<list_id>/delete', methods=['DELETE'])
-def delete_list(list_id):
-  try:
-    list = ToDoList.query.get(list_id)
-    for todo in list.todos:
-        db.session.delete(todo)
-
-    db.session.delete(list)
-    db.session.commit()
-  except:
-    db.session.rollback()
-  finally:
-    db.session.close()
-  return jsonify({ 'success': True })
-
+#------------------TodoList routes--------------------
+#create list
 @app.route('/lists/create', methods=['POST'])
 def create_list():
   error = False
@@ -125,6 +123,7 @@ def create_list():
   else:
     return jsonify(body)
 
+ #complete todo list 
 @app.route('/lists/<list_id>/set-completed', methods=['POST'])
 def complete_list(list_id):
   error = False
@@ -147,6 +146,23 @@ def complete_list(list_id):
   else:
     return redirect(url_for('index'))  
 
+#delete list 
+@app.route('/lists/<list_id>/delete', methods=['DELETE'])
+def delete_list(list_id):
+  try:
+    list = ToDoList.query.get(list_id)
+    for todo in list.todos:
+        db.session.delete(todo)
+
+    db.session.delete(list)
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+  return jsonify({ 'success': True })
+
+#--------------------Home routes---------------------
 @app.route('/lists/<list_id>')
 def get_list_todos(list_id):
     return render_template('index.html', 
